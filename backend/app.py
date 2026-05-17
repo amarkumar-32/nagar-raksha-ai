@@ -7,17 +7,26 @@ import pickle
 app = Flask(__name__)
 CORS(app)
 
-# LOAD AI MODEL
+# LOAD MODEL
 model = pickle.load(open("model.pkl", "rb"))
 
+
+# HOME ROUTE
+@app.route("/")
+def home():
+    return jsonify({
+        "message": "Nagar Raksha AI Backend Running"
+    })
+
+
 # DASHBOARD API
-@app.route('/dashboard')
+@app.route("/api/data")
 def dashboard():
 
-    # Random crowd count
+    # RANDOM CROWD COUNT
     people = random.randint(50, 500)
 
-    # Risk Logic
+    # RISK LOGIC
     if people < 150:
         risk = "Low"
 
@@ -27,10 +36,10 @@ def dashboard():
     else:
         risk = "High"
 
-    # AI Prediction
+    # AI PREDICTION
     prediction_value = int(model.predict([[18, 1]])[0])
 
-    # Final Data
+    # FINAL DATA
     data = {
         "people_count": people,
         "risk_level": risk,
@@ -41,12 +50,12 @@ def dashboard():
 
     return jsonify(data)
 
-# MAP LOCATIONS API
-@app.route('/locations')
+
+# MAP API
+@app.route("/api/locations")
 def locations():
 
     data = [
-
         {
             "name": "Delhi Temple",
             "lat": 28.7041,
@@ -70,11 +79,11 @@ def locations():
             "people": 99,
             "risk": "Low"
         }
-
     ]
 
     return jsonify(data)
 
+
 # RUN SERVER
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
