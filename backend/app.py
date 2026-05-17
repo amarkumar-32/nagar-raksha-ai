@@ -3,6 +3,7 @@ from flask_cors import CORS
 import random
 from datetime import datetime
 import pickle
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -10,14 +11,12 @@ CORS(app)
 # LOAD MODEL
 model = pickle.load(open("model.pkl", "rb"))
 
-
 # HOME ROUTE
 @app.route("/")
 def home():
     return jsonify({
         "message": "Nagar Raksha AI Backend Running"
     })
-
 
 # DASHBOARD API
 @app.route("/api/data")
@@ -49,7 +48,6 @@ def dashboard():
     }
 
     return jsonify(data)
-
 
 # MAP API
 @app.route("/api/locations")
@@ -83,8 +81,7 @@ def locations():
 
     return jsonify(data)
 
-
 # RUN SERVER
 if __name__ == "__main__":
-    port=int(os.environ.get("PORT",8080))
-    app.run(host="0.0.0.0"port=port)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
